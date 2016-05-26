@@ -42,10 +42,19 @@ object TFIDF {
 
         val item = line.split("\t")
 
+        val abcPattern = "[a-zA-Z]+".r
         val words = item(1)
         val duid = item(2)
-        (duid, words)
+
+        val userword = (abcPattern. findAllIn(words))
+
+        if (userword.toList(0).length == words.length)
+            (duid, words)
+        else
+          ("","")
+
       }
+      .filter{x => x._1 != ""}
       .reduceByKey((a:String, b:String) => a + " "+b)
 
 
