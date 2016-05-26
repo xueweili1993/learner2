@@ -37,13 +37,6 @@ object TFIDF {
 
 
     val text = sc.textFile(hdfspath)
-      /*.flatMap{case line  =>
-        //val item  = line.replaceAll(" +", " ").split("\\W+").map(y => (y, 1))
-        val item  = line.split("\t")
-        val kk= item.map(y=>{(y(3),y(2))})
-        kk
-      }*/
-    val line =text
       .filter{line => line.split("\t").length >= 3}
       .map{line =>
 
@@ -53,7 +46,7 @@ object TFIDF {
         val duid = item(2)
         (duid, words)
       }
-        .reduceByKey((a:String, b:String) => a + " "+b)
+//        .reduceByKey((a:String, b:String) => a + " "+b)
 
 
 
