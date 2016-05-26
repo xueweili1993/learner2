@@ -46,12 +46,11 @@ object TFIDF {
         val words = item(1)
         val duid = item(2)
 
-        val userword = (abcPattern. findAllIn(words))
+        val userword = (abcPattern. findAllIn(words)).mkString(" ")
 
-        if (userword.toList(0).length == words.length)
-            (duid, words)
-        else
-          ("","")
+
+        (duid, userword)
+
 
       }
       .filter{x => x._1 != ""}
