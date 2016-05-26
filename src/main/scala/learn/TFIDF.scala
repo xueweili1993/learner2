@@ -24,7 +24,7 @@ object TFIDF {
 
 
 
-//    val awsAccessKeyId = args(0)
+    val awsAccessKeyId = args(0)
     val awsSecretAccessKey = args(1)
 
     val anchordate = "20160426"
