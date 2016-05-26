@@ -46,7 +46,7 @@ object TFIDF {
         val duid = item(2)
         (duid, words)
       }
-//        .reduceByKey((a:String, b:String) => a + " "+b)
+      .reduceByKey((a:String, b:String) => a + " "+b)
 
 
 
