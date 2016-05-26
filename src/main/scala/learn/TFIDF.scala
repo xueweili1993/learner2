@@ -16,8 +16,8 @@ object TFIDF {
 
 
 
-    val hdfspath = "hdfs:///lxw/tfidf"
-    val savepath = "hdfs:///lxw/tf"
+    val hdfspath = "hdfs:///lxw/tfidf1"
+    val savepath = "hdfs:///lxw/tf1"
 
     val hadoopConf = sc.hadoopConfiguration
 
