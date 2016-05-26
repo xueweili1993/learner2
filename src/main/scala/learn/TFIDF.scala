@@ -55,8 +55,11 @@ object TFIDF {
 
 
       }
+
+
+
       .filter{x => x._1 != ""}
-      .reduceByKey((a:String, b:String) => a + " "+b)
+      .reduceByKey((a:String, b:String) => a + " "+b).cache()
 
 
 
