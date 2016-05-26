@@ -22,7 +22,9 @@ object TFIDF {
     val hadoopConf = sc.hadoopConfiguration
 
 
-    val awsAccessKeyId = args(0)
+
+
+//    val awsAccessKeyId = args(0)
     val awsSecretAccessKey = args(1)
 
     val anchordate = "20160426"
