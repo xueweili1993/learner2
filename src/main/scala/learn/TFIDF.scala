@@ -65,6 +65,7 @@ object TFIDF {
 //    val reduceddata = mappeddata
     //.collect()
     //.foreach(x => println("lixuefei log " + x))
+    HDFS.removeFile(savepath)
 
     text.saveAsTextFile(savepath)
 
