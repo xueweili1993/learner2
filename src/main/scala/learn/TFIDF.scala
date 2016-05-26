@@ -48,8 +48,10 @@ object TFIDF {
 
         val userword = (abcPattern. findAllIn(words)).mkString(" ")
 
-
+        if (userword.length == words.length)
         (duid, userword)
+        else
+          ("", "")
 
 
       }
