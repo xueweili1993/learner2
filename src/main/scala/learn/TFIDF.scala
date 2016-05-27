@@ -112,9 +112,14 @@ object TFIDF {
 
       .map{case(term2,((id,tff),z)) =>
 
-        (id,(term2, tff * z))
+        //(id,(term2, tff * z))
+        (tff * z, (id, term2))
 
-      }.groupByKey()
+      }.sortByKey()
+      .map{case (num, (id, term2))=>
+        (id, (term2, num))
+      }
+      .groupByKey()
 
 
 
