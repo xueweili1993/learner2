@@ -23,7 +23,7 @@ object TFIDF {
 
 
 
-    val hdfspath = "hdfs:///lxw/tfidf1"
+    val hdfspath = "hdfs:///lxw/teststop"
     val savepath1 = "hdfs:///lxw/tfIdf"
     val savepath2 = "hdfs:///lxw/idf"
     val savepath3 = "hdfs:///lxw/stopword"
@@ -44,17 +44,17 @@ object TFIDF {
 
     hadoopConf.set("fs.s3n.awsSecretAccessKey", awsSecretAccessKey)
 
-    //var stopword = new HashSet[String]
+
 
     val stop = sc.textFile(stopwordPath)
       .map{line =>
 
         val word = line.trim
-       // stopword.add(word)
+
         word
       }.collect()
 
-      //for (jj<- stop) stopword.add(jj)
+
 
 
 
@@ -66,19 +66,13 @@ object TFIDF {
 
         val item = line.split("\t")
 
-        val abcPattern = "[a-zA-Z]+".r
+        //val abcPattern = "[a-zA-Z]+".r
         val words = item(1)
         val duid = item(2)
 
-        val userword = (abcPattern. findAllIn(words)).mkString(" ")
-
-        val haha = stop_bc.value
-        if (userword.length == words.length && !stop.contains(words))
-        (duid, userword)
-        else
-          ("", "")
+        //val userword = (abcPattern. findAllIn(words)).mkString(" ")
+        (duid, words)
       }
-      .filter{x => x._1 != ""}
       .reduceByKey((a:String, b:String) => a + " "+b)
       .cache
 
@@ -88,19 +82,22 @@ object TFIDF {
 
 
 
-    val idf = text
+   /* val idf = text
       .flatMap{case (docId, doc) =>
-
         doc.split(" ")
           .map{word =>
 
             ((word,docId),1)
 
           }
-      }.distinct()
-     // .reduceByKey(_+_)
-        .map{case ((word1, docId1),fre1)=>
+      }
+        .filter { case ((term, docid), cc) =>
+            !stop.contains(term)
+        }
 
+      .distinct()
+      .reduceByKey(_+_)
+        .map{case ((word1, docId1),fre1)=>
           (word1,fre1)
         }
 
@@ -144,7 +141,7 @@ object TFIDF {
 
 
 
-    text.unpersist()
+    text.unpersist() */
 
 
     //HDFS.removeFile(savepath1)
