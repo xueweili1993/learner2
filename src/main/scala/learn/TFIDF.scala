@@ -68,7 +68,7 @@ object TFIDF {
         val item = line.split("\t")
 
         //val abcPattern = "[a-zA-Z]+".r
-        val words = item(1)
+        val words = item(1).toLowerCase
         val duid = item(2)
 
         //val userword = (abcPattern. findAllIn(words)).mkString(" ")
@@ -176,7 +176,7 @@ val tfIdf = filtered
     HDFS.removeFile(savepath3)
     HDFS.removeFile(savepath4)
 
-    tfIdf.repartition(1).saveAsTextFile(savepath1)
+    tfIdf.saveAsTextFile(savepath1)
     idf.saveAsTextFile(savepath2)
 
     text.saveAsTextFile(savepath3)
