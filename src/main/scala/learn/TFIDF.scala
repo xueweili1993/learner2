@@ -17,7 +17,8 @@ object TFIDF {
 
 
     val hdfspath = "hdfs:///lxw/tfidf1"
-    val savepath = "hdfs:///lxw/tf1"
+    val savepath1 = "hdfs:///lxw/tf"
+    val savepath2 = "hdfs:///lxw/idf"
 
     val hadoopConf = sc.hadoopConfiguration
 
@@ -59,21 +60,56 @@ object TFIDF {
 
 
       .filter{x => x._1 != ""}
-      .reduceByKey((a:String, b:String) => a + " "+b).cache()
+      .reduceByKey((a:String, b:String) => a + " "+b)
+      .cache
 
 
 
+    val tf = text
+        .flatMap{case (docId, doc) =>
+
+          doc.split(" ")
+              .map{word =>
+
+                ((docId, word), 1)
+              }
+        }
+      .reduceByKey(_+_)
+      .map{case ((docID, term), fre) =>
+
+        (docID, (term, fre))
+      }
+        .groupByKey()
+
+    val idf = text
+      .flatMap{case (docId, doc) =>
+
+        doc.split(" ")
+          .map{word =>
+
+            ((word,docId),1)
+
+          }
+      }.distinct()
+     // .reduceByKey(_+_)
+        .map{case ((word1, docId1),fre1)=>
+
+          (word1,fre1)
+        }
+
+        .reduceByKey(_+_)
 
 
+    text.unpersist()
 
-
-
-//    val reduceddata = mappeddata
+    //    val reduceddata = mappeddata
     //.collect()
     //.foreach(x => println("lixuefei log " + x))
-    HDFS.removeFile(savepath)
+    HDFS.removeFile(savepath1)
+    HDFS.removeFile(savepath2)
 
-    text.saveAsTextFile(savepath)
+    tf.saveAsTextFile(savepath1)
+    idf.saveAsTextFile(savepath2)
 
     sc.stop()
 
