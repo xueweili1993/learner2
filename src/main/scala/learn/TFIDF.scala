@@ -20,7 +20,7 @@ object TFIDF {
     val hdfspath = "hdfs:///lxw/tfidf1"
     val savepath1 = "hdfs:///lxw/tfIdf"
     val savepath2 = "hdfs:///lxw/idf"
-   // val savepath3 = "hdfs:///lxw/N"
+
 
     val hadoopConf = sc.hadoopConfiguration
 
@@ -68,22 +68,7 @@ object TFIDF {
     val N = text.count ()
 
 
-   /* val tf = text
-        .flatMap{case (docId, doc) =>
 
-          doc.split(" ")
-              .map{word =>
-
-                ((docId, word), 1)
-              }
-        }
-      .reduceByKey(_+_)
-      .map{case ((docID, term), fre) =>
-
-        (term, (docID, fre))
-      }
-        .groupByKey()
-*/
 
 
     val idf = text
