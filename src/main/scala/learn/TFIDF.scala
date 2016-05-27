@@ -1,6 +1,7 @@
 package learn
 
 import org.apache.spark.{SparkConf, SparkContext}
+import math.log10
 /**
   * Created by xinmei on 16/5/26.
   */
@@ -19,6 +20,7 @@ object TFIDF {
     val hdfspath = "hdfs:///lxw/tfidf1"
     val savepath1 = "hdfs:///lxw/tf"
     val savepath2 = "hdfs:///lxw/idf"
+    val savepath3 = "hdfs:///lxw/N"
 
     val hadoopConf = sc.hadoopConfiguration
 
@@ -63,6 +65,7 @@ object TFIDF {
       .reduceByKey((a:String, b:String) => a + " "+b)
       .cache
 
+    val N = text.count ()
 
 
     val tf = text
@@ -81,6 +84,8 @@ object TFIDF {
       }
         .groupByKey()
 
+
+
     val idf = text
       .flatMap{case (docId, doc) =>
 
@@ -98,7 +103,12 @@ object TFIDF {
         }
 
         .reduceByKey(_+_)
-      .sortByKey();
+      //.sortByKey()
+      .map{case (word,fre)=>
+
+      (word,N/fre)
+    }
+
 
 
     text.unpersist()
@@ -108,9 +118,11 @@ object TFIDF {
     //.foreach(x => println("lixuefei log " + x))
     HDFS.removeFile(savepath1)
     HDFS.removeFile(savepath2)
+    HDFS.removeFile(savepath3)
 
     tf.saveAsTextFile(savepath1)
-    idf.saveAsTextFile(savepath2)
+    idf.saveAsTextFile(savepath3)
+
 
     sc.stop()
 
