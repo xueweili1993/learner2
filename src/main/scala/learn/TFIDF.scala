@@ -106,7 +106,7 @@ object TFIDF {
       //.sortByKey()
       .map{case (word,fre)=>
 
-      (word,N/fre)
+      (word,log10(N/fre))
     }
 
 
