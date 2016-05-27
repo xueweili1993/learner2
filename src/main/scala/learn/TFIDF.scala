@@ -24,7 +24,7 @@ object TFIDF {
 
 
     val hdfspath = "hdfs:///lxw/teststop"
-    //val savepath1 = "hdfs:///lxw/tfIdf"
+    val savepath1 = "hdfs:///lxw/tfIdf"
     val savepath2 = "hdfs:///lxw/idf"
     val savepath3 = "hdfs:///lxw/stopword"
     val savepath4 = "hdfs:///lxw/origin"
@@ -128,33 +128,14 @@ object TFIDF {
         (word, log10(N/fre))
       }
 
-   /* val idf = text
-      .flatMap{case (docId, doc) =>
-        doc.split(" ")
-          .map{word =>
 
-            ((word,docId),1)
 
-          }
-      }
-        .filter { case ((term, docid), cc) =>
-            !stop.contains(term)
-        }
 
-      .distinct()
-      //.reduceByKey(_+_)
-        .map{case ((word1, docId1),fre1)=>
-          (word1,fre1)
-        }
 
-        .reduceByKey(_+_)
-      //.sortByKey()
-      .map{case (word,fre)=>
 
-      (word,log10(N/fre))
-    }
 
-    val tfIdf = text
+
+val tfIdf = filtered
       .flatMap{case (docId, doc) =>
 
         doc.split(" ")
@@ -187,15 +168,15 @@ object TFIDF {
 
 
 
-    text.unpersist() */
 
 
-    //HDFS.removeFile(savepath1)
+
+    HDFS.removeFile(savepath1)
     HDFS.removeFile(savepath2)
     HDFS.removeFile(savepath3)
     HDFS.removeFile(savepath4)
 
-    //tfIdf.repartition(1).saveAsTextFile(savepath1)
+    tfIdf.repartition(1).saveAsTextFile(savepath1)
     idf.saveAsTextFile(savepath2)
 
     text.saveAsTextFile(savepath3)
