@@ -68,7 +68,7 @@ object TFIDF {
     val N = text.count ()
 
 
-    val tf = text
+   /* val tf = text
         .flatMap{case (docId, doc) =>
 
           doc.split(" ")
@@ -80,10 +80,10 @@ object TFIDF {
       .reduceByKey(_+_)
       .map{case ((docID, term), fre) =>
 
-        (docID, (term, fre))
+        (term, (docID, fre))
       }
         .groupByKey()
-
+*/
 
 
     val idf = text
@@ -108,6 +108,22 @@ object TFIDF {
 
       (word,log10(N/fre))
     }
+
+    val tf = text
+      .flatMap{case (docId, doc) =>
+
+        doc.split(" ")
+          .map{word =>
+
+            ((docId, word), 1)
+          }
+      }
+      .reduceByKey(_+_)
+      .map{case ((docID, term), fre) =>
+
+        (term, (docID, fre))
+      }
+      .groupByKey()
 
 
 
