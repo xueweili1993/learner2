@@ -93,7 +93,8 @@ object TFIDF {
       term.length==myterm.length
       }
       .filter{case (term, myterm,docId) =>
-      !stop.contains(term)
+        val haha= stop_bc.value
+        !haha.contains(term)
       }
       .map{case (term, myterm,docId)=>
 
