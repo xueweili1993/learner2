@@ -112,14 +112,16 @@ object TFIDF {
 
       .map{case(term2,((id,tff),z)) =>
 
-        //(id,(term2, tff * z))
-        (tff * z, (id, term2))
+        (id,(term2, tff * z))
 
-      }.sortByKey()
-      .map{case (num, (id, term2))=>
-        (id, (term2, num))
-      }
-      .groupByKey()
+
+      }.groupByKey()
+      .map{case (id,x) =>
+
+          val y = x.toArray.sortWith( _._2 > _._2)
+        (id, y.mkString("\t"))
+    }
+
 
 
 
