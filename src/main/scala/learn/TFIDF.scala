@@ -28,6 +28,7 @@ object TFIDF {
     val savepath2 = "hdfs:///lxw/idf"
     val savepath3 = "hdfs:///lxw/stopword"
     val savepath4 = "hdfs:///lxw/origin"
+    val savepath5 = "hdfs:///lxw/wordsonly"
 
     val hadoopConf = sc.hadoopConfiguration
 
@@ -135,7 +136,7 @@ object TFIDF {
 
 
 
-val tfIdf = filtered
+val joined = filtered
       .flatMap{case (docId, doc) =>
 
         doc.split(" ")
@@ -151,9 +152,21 @@ val tfIdf = filtered
       }
       .join(idf)
 
-      .map{case(term2,((id,tff),z)) =>
+      val wordnum = joined
+      .map{case(term2, ((id, tff), z))=>
 
-        (id,(term2, tff * z))
+        (tff * z,term2)
+
+      }
+      .collect
+        .sortWith(_._2>_._2)
+      .foreach(x=> println("lxw "+x))
+
+
+
+      val tfIdf=joined.map { case (term2, ((id, tff), z)) =>
+
+        (id, (term2, tff * z))
 
 
       }.groupByKey()
@@ -161,8 +174,9 @@ val tfIdf = filtered
 
           val y = x.toArray.sortWith( _._2 > _._2)
         (id, y.mkString("\t"))
-    }
+    }.cache
 
+    filtered.unpersist()
 
 
 
@@ -175,12 +189,14 @@ val tfIdf = filtered
     HDFS.removeFile(savepath2)
     HDFS.removeFile(savepath3)
     HDFS.removeFile(savepath4)
+    //HDFS.removeFile(savepath5)
 
     tfIdf.saveAsTextFile(savepath1)
     idf.saveAsTextFile(savepath2)
 
     text.saveAsTextFile(savepath3)
     filtered.saveAsTextFile(savepath4)
+    //wordnum.saveAsTextFile(savepath5)
     sc.stop()
 
   }
