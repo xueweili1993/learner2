@@ -23,7 +23,7 @@ object TFIDF {
 
 
 
-    val hdfspath = "hdfs:///lxw/teststop"
+    val hdfspath = "hdfs:///lxw/tfidf1"
     val savepath1 = "hdfs:///lxw/tfIdf"
     val savepath2 = "hdfs:///lxw/idf"
     val savepath3 = "hdfs:///lxw/stopword"
@@ -82,7 +82,7 @@ object TFIDF {
       .reduceByKey((a:String, b:String) => a + " "+b)
       .cache
 
-    /*val N = text.count ()
+    val N = text.count ()
 
 
 
@@ -144,7 +144,7 @@ object TFIDF {
 
 
 
-    text.unpersist()*/
+    text.unpersist()
 
 
     //HDFS.removeFile(savepath1)
