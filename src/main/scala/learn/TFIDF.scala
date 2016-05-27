@@ -121,9 +121,11 @@ object TFIDF {
       .reduceByKey(_+_)
       .map{case ((docID, term), fre) =>
 
-        (docID, (term, fre))
+        (term, (docID, fre))
       }
-      .groupByKey()
+      .join(idf)
+
+
 
 
 
@@ -137,7 +139,7 @@ object TFIDF {
     HDFS.removeFile(savepath3)
 
     tf.saveAsTextFile(savepath1)
-    idf.saveAsTextFile(savepath3)
+    idf.saveAsTextFile(savepath2)
 
 
     sc.stop()
