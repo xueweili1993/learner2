@@ -136,7 +136,7 @@ object TFIDF {
     HDFS.removeFile(savepath2)
     //HDFS.removeFile(savepath3)
 
-    tfIdf.saveAsTextFile(savepath1)
+    tfIdf.repartition(1).saveAsTextFile(savepath1)
     idf.saveAsTextFile(savepath2)
 
 
