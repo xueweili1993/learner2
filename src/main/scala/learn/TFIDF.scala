@@ -44,7 +44,7 @@ object TFIDF {
 
     hadoopConf.set("fs.s3n.awsSecretAccessKey", awsSecretAccessKey)
 
-    //var stopword = new HashSet[String]
+    var stopword = new HashSet[String]
 
     val stop = sc.textFile(stopwordPath)
       .map{line =>
@@ -54,7 +54,7 @@ object TFIDF {
         word
       }.collect()
 
-
+      for (jj<- stop) stopword.add(jj)
 
 
     val text = sc.textFile(hdfspath)
@@ -69,7 +69,7 @@ object TFIDF {
 
         val userword = (abcPattern. findAllIn(words)).mkString(" ")
 
-        if (userword.length == words.length && !stop.contains(userword))
+        if (userword.length == words.length && !stopword.contains(words))
         (duid, userword)
         else
           ("", "")
