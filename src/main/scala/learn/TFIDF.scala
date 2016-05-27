@@ -18,9 +18,9 @@ object TFIDF {
 
 
     val hdfspath = "hdfs:///lxw/tfidf1"
-    val savepath1 = "hdfs:///lxw/tf"
+    val savepath1 = "hdfs:///lxw/tfIdf"
     val savepath2 = "hdfs:///lxw/idf"
-    val savepath3 = "hdfs:///lxw/N"
+   // val savepath3 = "hdfs:///lxw/N"
 
     val hadoopConf = sc.hadoopConfiguration
 
@@ -109,7 +109,7 @@ object TFIDF {
       (word,log10(N/fre))
     }
 
-    val tf = text
+    val tfIdf = text
       .flatMap{case (docId, doc) =>
 
         doc.split(" ")
@@ -142,9 +142,9 @@ object TFIDF {
     //.foreach(x => println("lixuefei log " + x))
     HDFS.removeFile(savepath1)
     HDFS.removeFile(savepath2)
-    HDFS.removeFile(savepath3)
+    //HDFS.removeFile(savepath3)
 
-    tf.saveAsTextFile(savepath1)
+    tfIdf.saveAsTextFile(savepath1)
     idf.saveAsTextFile(savepath2)
 
 
