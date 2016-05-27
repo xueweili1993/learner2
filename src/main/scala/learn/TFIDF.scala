@@ -90,7 +90,7 @@ object TFIDF {
             }
       }
       .filter{case (term, myterm,docId)=>
-      term.length!=myterm.length
+      term.length==myterm.length
       }
       .filter{case (term, myterm,docId) =>
       !stop.contains(term)
