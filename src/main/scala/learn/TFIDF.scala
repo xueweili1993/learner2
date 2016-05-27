@@ -23,7 +23,7 @@ object TFIDF {
 
 
 
-    val hdfspath = "hdfs:///lxw/teststop"
+    val hdfspath = "hdfs:///lxw/tfidf1"
     val savepath1 = "hdfs:///lxw/tfIdf"
     val savepath2 = "hdfs:///lxw/idf"
     val savepath3 = "hdfs:///lxw/stopword"
