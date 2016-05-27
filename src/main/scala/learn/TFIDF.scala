@@ -124,6 +124,11 @@ object TFIDF {
         (term, (docID, fre))
       }
       .join(idf)
+      .map{case(word,(id, tff),idff)=>
+
+        (id,(word, tff*idff))
+
+      }.groupByKey()
 
 
 
