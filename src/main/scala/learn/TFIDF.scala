@@ -159,7 +159,7 @@ val joined = filtered
 
       }
       .collect
-        .sortWith(_._2>_._2)
+        .sortWith(_._1>_._1)
       .foreach(x=> println("lxw "+x))
 
 
