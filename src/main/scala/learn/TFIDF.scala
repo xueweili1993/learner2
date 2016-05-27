@@ -2,6 +2,7 @@ package learn
 
 import org.apache.spark.{SparkConf, SparkContext}
 import math.log10
+import scala.collection.mutable.HashSet
 /**
   * Created by xinmei on 16/5/26.
   */
@@ -17,10 +18,15 @@ object TFIDF {
 
 
 
+    val stopwordPath = "s3n://xinmei-dataanalysis/ref/stopwords.dict"
+
+
+
+
     val hdfspath = "hdfs:///lxw/tfidf1"
     val savepath1 = "hdfs:///lxw/tfIdf"
     val savepath2 = "hdfs:///lxw/idf"
-
+    val savepath3 = "hdfs:///lxw/stopword"
 
     val hadoopConf = sc.hadoopConfiguration
 
@@ -38,6 +44,15 @@ object TFIDF {
 
     hadoopConf.set("fs.s3n.awsSecretAccessKey", awsSecretAccessKey)
 
+    var stopword = new HashSet[String]
+
+    val stop = sc.textFile(stopwordPath)
+      .map{line =>
+
+        val word = line.trim
+        stopword.add(word)
+      }
+
 
     val text = sc.textFile(hdfspath)
       .filter{line => line.split("\t").length >= 3}
@@ -51,7 +66,7 @@ object TFIDF {
 
         val userword = (abcPattern. findAllIn(words)).mkString(" ")
 
-        if (userword.length == words.length)
+        if (userword.length == words.length && !stopword.contains(userword))
         (duid, userword)
         else
           ("", "")
@@ -65,7 +80,7 @@ object TFIDF {
       .reduceByKey((a:String, b:String) => a + " "+b)
       .cache
 
-    val N = text.count ()
+    /*val N = text.count ()
 
 
 
@@ -127,19 +142,17 @@ object TFIDF {
 
 
 
-    text.unpersist()
-
-    //    val reduceddata = mappeddata
-    //.collect()
-    //.foreach(x => println("lixuefei log " + x))
-    HDFS.removeFile(savepath1)
-    HDFS.removeFile(savepath2)
-    //HDFS.removeFile(savepath3)
-
-    tfIdf.repartition(1).saveAsTextFile(savepath1)
-    idf.saveAsTextFile(savepath2)
+    text.unpersist()*/
 
 
+    //HDFS.removeFile(savepath1)
+    //HDFS.removeFile(savepath2)
+    HDFS.removeFile(savepath3)
+
+    //tfIdf.repartition(1).saveAsTextFile(savepath1)
+    //idf.saveAsTextFile(savepath2)
+
+    text.saveAsTextFile(savepath3)
     sc.stop()
 
   }
