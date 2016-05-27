@@ -121,7 +121,7 @@ object TFIDF {
       .reduceByKey(_+_)
       .map{case ((docID, term), fre) =>
 
-        (term, (docID, fre))
+        (docID, (term, fre))
       }
       .groupByKey()
 
