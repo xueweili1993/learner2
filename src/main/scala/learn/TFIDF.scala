@@ -98,6 +98,7 @@ object TFIDF {
         }
 
         .reduceByKey(_+_)
+      .sortByKey();
 
 
     text.unpersist()
