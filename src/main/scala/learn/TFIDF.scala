@@ -24,9 +24,10 @@ object TFIDF {
 
 
     val hdfspath = "hdfs:///lxw/teststop"
-    val savepath1 = "hdfs:///lxw/tfIdf"
-    val savepath2 = "hdfs:///lxw/idf"
+    //val savepath1 = "hdfs:///lxw/tfIdf"
+    //val savepath2 = "hdfs:///lxw/idf"
     val savepath3 = "hdfs:///lxw/stopword"
+    val savepath4 = "hdfs:///lxw/origin"
 
     val hadoopConf = sc.hadoopConfiguration
 
@@ -78,7 +79,28 @@ object TFIDF {
 
     val N = text.count ()
 
+     val filtered = text
+      .flatMap{case (docId, doc)=>
 
+          doc.split(" ")
+            . map{word =>
+               val abcPattern = "[a-zA-Z]+".r
+               val userword = (abcPattern. findAllIn(word)).mkString(" ")
+              (word, userword, docId)
+            }
+      }
+      .filter{case (term, myterm,docId)=>
+      term.length!=myterm.length
+      }
+      .filter{case (term, myterm,docId) =>
+      !stop.contains(term)
+      }
+      .map{case (term, myterm,docId)=>
+
+        (docId, term)
+      }
+      .reduceByKey((a:String, b:String) => a + " "+b)
+      .cache
 
 
 
@@ -147,11 +169,13 @@ object TFIDF {
     //HDFS.removeFile(savepath1)
     //HDFS.removeFile(savepath2)
     HDFS.removeFile(savepath3)
+    HDFS.removeFile(savepath4)
 
     //tfIdf.repartition(1).saveAsTextFile(savepath1)
     //idf.saveAsTextFile(savepath2)
 
     text.saveAsTextFile(savepath3)
+    filtered.saveAsTextFile(savepath4)
     sc.stop()
 
   }
